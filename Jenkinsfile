@@ -8,10 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // For local Git repo (adjust path if needed)
-                dir('/home/kiran/my_python_project') {
-                    git branch: 'main', url: 'file:///home/kiran/my_python_project'
-                }
+                git branch: 'main', url: 'git@github.com:kiran-bsv/my_python_project.git'
             }
         }
        
@@ -31,7 +28,7 @@ pipeline {
        
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t  .'
+                sh 'docker build -t my-python-project:latest .'
             }
         }
        
@@ -39,7 +36,7 @@ pipeline {
             steps {
                 sh 'docker stop my-python-container || true'
                 sh 'docker rm my-python-container || true'
-                sh 'docker run -d --name my-python-container '
+                sh 'docker run -d --name my-python-container my-python-project:latest'
             }
         }
     }
